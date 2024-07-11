@@ -40,37 +40,39 @@ function App() {
   ]);
 
   function handleSave(submission: UserSubmission) {
-    axios
-      .post('https://wordsearch-backend.onrender.com', { submission })
-      .then((response) => {
-        const { data } = response.data;
-        const { data: wordSearchData } = data;
+    try {
+      axios
+        .post('https://wordsearch-backend.onrender.com/api/WordsearchData', {
+          submission,
+        })
+        .then((response) => {
+          const { data } = response.data;
+          const { data: wordSearchData } = data;
 
-        const dataUrl = data.dataURL;
-        console.log(wordSearchData);
+          const dataUrl = data.dataURL;
+          console.log(wordSearchData);
 
-        // Create a Blob object from the data URL
-        const binaryData = atob(dataUrl.split(',')[1]);
-        const arrayBuffer = new ArrayBuffer(binaryData.length);
-        const uint8Array = new Uint8Array(arrayBuffer);
+          // Create a Blob object from the data URL
+          const binaryData = atob(dataUrl.split(',')[1]);
+          const arrayBuffer = new ArrayBuffer(binaryData.length);
+          const uint8Array = new Uint8Array(arrayBuffer);
 
-        for (let i = 0; i < binaryData.length; i++) {
-          uint8Array[i] = binaryData.charCodeAt(i);
-        }
-        setWordSearchData([
-          {
-            ...wordSearchData,
-          },
-        ]);
-        console.log('wordSearch Data just set', wordSearchData[0].title);
-        const file = new Blob([uint8Array], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(file);
-        setDownloadURL(url);
-        setDownloadReady(true);
-      })
-      .catch((error) => {
-        console.error('Error saving data:', error);
-      });
+          for (let i = 0; i < binaryData.length; i++) {
+            uint8Array[i] = binaryData.charCodeAt(i);
+          }
+          setWordSearchData([
+            {
+              ...wordSearchData,
+            },
+          ]);
+          const file = new Blob([uint8Array], { type: 'application/pdf' });
+          const url = window.URL.createObjectURL(file);
+          setDownloadURL(url);
+          setDownloadReady(true);
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
