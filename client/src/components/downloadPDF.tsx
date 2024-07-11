@@ -1,7 +1,7 @@
 import { WordSearchData } from '../../../Types/index.js';
 
 interface DownloadButtonProps {
-  downloadURL: string;
+  downloadURL: string | undefined;
   wordSearchData: WordSearchData[];
 }
 
@@ -16,14 +16,20 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
     console.log(title);
 
     const link = document.createElement('a');
-    link.href = downloadURL;
-    link.setAttribute(
-      'download',
-      `${title + '_wordsearch' || 'wordsearch'}.pdf`
-    );
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    if (typeof downloadURL === 'string') {
+      link.href = downloadURL;
+      link.setAttribute(
+        'download',
+        `${title + '_wordsearch' || 'wordsearch'}.pdf`
+      );
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } else {
+      throw new Error(
+        ` Error! The download url is a type of${typeof downloadURL}, download button attribute is expecting to receive a string`
+      );
+    }
   }
 
   return (

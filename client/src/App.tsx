@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import axios from 'axios';
 import './App.css';
 import { UserSubmission } from '../../Types/index.ts';
@@ -21,10 +21,27 @@ function App() {
   const [wordSearchData, setWordSearchData] = useState<WordSearchData[]>([]);
   const [downloadReady, setDownloadReady] = useState<boolean>(false);
   const [downloadURL, setDownloadURL] = useState<string>();
+  const contextValue = useMemo(() => {
+    return {
+      userSubmission,
+      setUserSubmission,
+      wordLimit,
+      setWordLimit,
+      message,
+      setMessage,
+    };
+  }, [
+    userSubmission,
+    setUserSubmission,
+    wordLimit,
+    setWordLimit,
+    message,
+    setMessage,
+  ]);
 
   function handleSave(submission: UserSubmission) {
     axios
-      .post('http://localhost:8000/api/WordsearchData', { submission })
+      .post('https://wordsearch-backend.onrender.com', { submission })
       .then((response) => {
         const { data } = response.data;
         const { data: wordSearchData } = data;
@@ -59,16 +76,7 @@ function App() {
   return (
     <div className="App overflow-hidden h-screen">
       <div className="min-h-svh flex">
-        <AppContext.Provider
-          value={{
-            userSubmission,
-            setUserSubmission,
-            wordLimit,
-            setWordLimit,
-            message,
-            setMessage,
-          }}
-        >
+        <AppContext.Provider value={contextValue}>
           <div className="w-full flex items-center  flex-col content-between justify-center overflow-hidden">
             <div className="grid h-full overflow-hidden">
               <h1 className="text-2xl font-bold leading-7 sm:truncate sm:text-3xl sm:tracking-tight mb-2 mt-6 relative capitalize ">
