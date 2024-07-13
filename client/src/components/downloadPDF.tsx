@@ -13,8 +13,6 @@ const DownloadButton: React.FC<DownloadButtonProps> = ({
     const firstDataEntry = Object.values(wordSearchData[0])[0];
     const { title } = firstDataEntry;
 
-    console.log(title);
-
     const link = document.createElement('a');
     if (typeof downloadURL === 'string') {
       link.href = downloadURL;
