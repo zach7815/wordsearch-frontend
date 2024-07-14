@@ -7,6 +7,7 @@ import AppContext from './context/formContext.tsx';
 import ExampleWordsearchCarousel from './components/swiper.tsx';
 import { WordSearchData } from '../../Types/index';
 import DownloadButton from './components/downloadPDF.tsx';
+import HalfpageSpinner from './components/HalfPageload.tsx';
 
 function App() {
   const [userSubmission, setUserSubmission] = useState<UserSubmission>({
@@ -86,18 +87,19 @@ function App() {
               {downloadReady === false ? (
                 <FormContainer handleSave={handleSave} />
               ) : (
-                <DownloadButton
-                  downloadURL={downloadURL}
-                  wordSearchData={wordSearchData}
-                />
+                (
+                  <DownloadButton
+                    downloadURL={downloadURL}
+                    wordSearchData={wordSearchData}
+                  />
+                ) && <HalfpageSpinner />
               )}
             </div>
           </div>
+          <div className="w-full flex items-center  justify-center  p-0 m-0 overflow-auto exampleContainer">
+            <ExampleWordsearchCarousel />
+          </div>
         </AppContext.Provider>
-
-        <div className="w-full flex items-center  justify-center  p-0 m-0 overflow-auto exampleContainer">
-          <ExampleWordsearchCarousel />
-        </div>
       </div>
     </div>
   );
