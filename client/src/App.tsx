@@ -18,6 +18,7 @@ function App() {
     words: [],
   });
   const [wordLimit, setWordLimit] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [wordSearchData, setWordSearchData] = useState<WordSearchData[]>([]);
   const [downloadReady, setDownloadReady] = useState<boolean>(false);
@@ -41,6 +42,7 @@ function App() {
   ]);
 
   function handleSave(submission: UserSubmission) {
+    setLoading(true);
     try {
       axios
         .post('https://wordsearch-backend.onrender.com/api/WordsearchData', {
@@ -69,6 +71,7 @@ function App() {
           const url = window.URL.createObjectURL(file);
           setDownloadURL(url);
           setDownloadReady(true);
+          setLoading(false);
         });
     } catch (error) {
       console.log(error);
@@ -87,13 +90,12 @@ function App() {
               {downloadReady === false ? (
                 <FormContainer handleSave={handleSave} />
               ) : (
-                (
-                  <DownloadButton
-                    downloadURL={downloadURL}
-                    wordSearchData={wordSearchData}
-                  />
-                ) && <HalfpageSpinner />
+                <DownloadButton
+                  downloadURL={downloadURL}
+                  wordSearchData={wordSearchData}
+                />
               )}
+              {loading === true && <HalfpageSpinner />}
             </div>
           </div>
           <div className="w-full flex items-center  justify-center  p-0 m-0 overflow-auto exampleContainer">
