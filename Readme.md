@@ -47,7 +47,7 @@ List the ready features here:
 
 ## Screenshots
 ![Example Wordsearch Sheet](client/public/Example-Wordsearch.jpg)
-![Example Wordsearch Answer Sheet](client/public/Example-Answer.jpg)
+![Example Wordsearch Answer Sheet](client/public/Example-Answers.jpg)
 ![App Starting UI Screenshot](client/public/Wordsearch-Gen-App-Screenshot.png)
 
 
